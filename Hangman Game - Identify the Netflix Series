@@ -1,0 +1,169 @@
+import random
+from tkinter import *
+from PIL import ImageTk, Image
+from tkinter import messagebox
+
+class Hi(Frame):
+
+    def set_game(self):
+        qno = self.number
+        self.list_done.append(qno)
+        if self.number == 1:
+            self.question = "A terminally ill Chemistry teacher teams with a former student to manufacture crystal meth to secure his family's future."
+            self.ans = "Breaking Bad"
+        elif self.number == 2:
+            self.question = "A privileged New Yorker ends up in a women's prison when a past crime catches up with her in this Emmy-winning series."
+            self.ans = "Orange is the New Black"
+        elif self.number == 3:
+            self.question = "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces and one strange little girl."
+            self.ans = "Stranger Things"
+        elif self.number == 4:
+            self.question = "Set in 1960s New York City, this award-winning series takes a peek inside an ad agency during an era when the cutthroat business had a glamorous lure."
+            self.ans = "Mad Men"
+        elif self.number == 5:
+            self.question = "In this updated take on Sir Arthur Conan Doyle's beloved mystery tales, the eccentric sleuth prowls the streets of modern London in search of clues."
+            self.ans = "Sherlock"
+        elif self.number == 6:
+            self.question = "Rich, unreasonably attractive private school students do horrible, scandalous things to each other. Repeatedly."
+            self.ans = "Gossip Girl"
+        elif self.number == 7:
+            self.question = "After a teenage girl's perplexing suicide, a classmate receives a series of tapes that unravel the mystery of her tragic choice."
+            self.ans = "13 Reasons Why"
+        elif self.number == 8:
+            self.question = "Love, laughter and the best friends you could ask for. Just like real life. But with really nice apartments."
+            self.ans = "FRIENDS"
+        elif self.number == 9:
+            self.question = "Mild-mannered man works for the police department as a blood-splatter analyst but moonlights as a murderer who only targets other killers."
+            self.ans = "Dexter"
+        elif self.number == 10:
+            self.question = "The true story of Columbia's infamously violent and powerful drug cartels fuels this gritty gangster drama series."
+            self.ans = "Narcos"
+        elif self.number == 11:
+            self.question = "The boss is an idiot, the workers are clueless, elaborate pranks and feuds abound. Just another day at the office."
+            self.ans = "The Office"
+        elif self.number == 12:
+            self.question = "A ruthless politician will stop at nothing to conquer Washington, D. C., in this Emmy and Golden Globe-winning political drama."
+            self.ans = "House of Cards"
+        elif self.number == 13:
+            self.question = "While navigating the troubled waters of sex, romance, school, and family, a teen and his gang become entangled in a dark mystery."
+            self.ans = "Riverdale"
+        elif self.number == 14:
+            self.question = "A notorious gang in 1919 Birmingham, England, is led by the fierce Tommy Shelby, a crime boss set on moving up in the world no matter the cost."
+            self.ans = "Peaky Blinders"
+        elif self.number == 15:
+            self.question = "A super-powered woman who had a brief superhero career until an incident where the villainous Kilgrave caused her to kill someone. After that incident, she became a private investigator."
+            self.ans = "Jessica Jones"
+        elif self.number == 16:
+            self.question = "The sleek world of tomorrow offers opportunities beyond our wildest dreams. At a price of our worse nightmares."
+            self.ans = "Black Mirror"
+        elif self.number == 17:
+            self.question = "The story focuses on a seasoned and cynical Bombay police officer, summoned by an anonymous tip one morning, a voice which promises him an opportunity to capture a powerful criminal overlord of the G-Company. As the stakes mount, it becomes clear that the game the two players thought they were engaged in is in fact part of a much larger scenario, one that expands beyond their city."
+            self.ans = "Sacred Games"
+        elif self.number == 18:
+            self.question = "One of Manhattan's top corporate lawyers sets out to recruit a new hotshot associate and hires the only guy that impresses him, a brilliant but unmotivated college dropout. Though he isn't actually a lawyer, this legal prodigy has the book smarts of a Harvard law grad and the street smarts of a hustler. However, in order to serve justice and save their jobs, both these unconventional thinkers must continue the charade."
+            self.ans = "Suits"
+        elif self.number == 19:
+            self.question = "Eight thieves take hostages and lock themselves in the Royal Mint of Spain as a criminal mastermind manipulates the police to carry out his plan."
+            self.ans = "Money Heist"
+        else:
+            self.question = "Family. Power. A young woman rises to rule an empire amid the challenges of the modern age."
+            self.ans = "The Crown"
+
+    def clicked(self,alphabet):
+        a=self.count
+        print("w"+str(a))
+        image_paths = ['Step1.jpg','Step2.jpg','Step3.jpg','Step4.jpg','Step5.jpg']
+        img = Image.open(image_paths[a])
+        img = img.resize((200, 200))
+        img = ImageTk.PhotoImage(img)
+        panel = Button(root,image=img)
+        panel.grid(column=0,row=12,columnspan=5)
+        answer = self.ans
+        previous_position=0
+        if alphabet not in answer.upper():
+            self.count += 1
+            print(self.count)
+            if self.count == 5:
+                messagebox.showinfo("Warning!","Game Over")
+            Chances_Left = 5 - self.count
+            Counter = Button(root, text=str(Chances_Left) + " Chances Left.").grid(row=12, column=5, columnspan=6)
+        while alphabet in answer.upper():
+            position=answer.upper().find(alphabet)
+            self.Dash[position+previous_position]["text"] = alphabet
+            answer=answer[position+1:]
+            previous_position=position+1
+
+    def __init__(self,master):
+        self.count=0
+        self.list_done = []
+        self.number = random.randrange(1,20)
+        while self.number in self.list_done:
+            self.number = random.randrange(1,20)
+        self.set_game()
+        photo = PhotoImage(file=r"Netflix.jpg")
+        photu = photo.subsample(8,8)
+        banner=Button(root,text="hi",image=photu).grid(column=0,row=0,columnspan=12)
+        #banner.image = photu
+        title=Label(root,text="HANGMAN GAME - GUESS THE NETFLIX SERIES",font=("Georgia",20),fg="red").grid(row=1,column=0,columnspan=12)
+        question=Label(root,text=self.question,wraplength=600).grid(row=2, column=0,rowspan=2,columnspan=12)
+        column_no=0
+        column_no2=0
+        row_no=0
+        self.Dash = [Button]*100
+        while column_no<len(self.ans):
+            if column_no>20:
+                row_no = 3
+                column_no2=column_no-21
+            elif column_no>13:
+                row_no = 2
+                column_no2=column_no-14
+            elif column_no>6:
+                row_no=1
+                column_no2=column_no-7
+            else:
+                column_no2=column_no
+            self.Dash[column_no] = Button(root,text=" ",bg="white",fg="Black",width=3,height=1)
+            self.Dash[column_no].grid(column=5+column_no2,row=4+row_no)
+            column_no += 1
+
+        A = Button(root,text="A",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("A")).grid(column=0, row=4)
+        B = Button(root,text="B",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("B")).grid(column=1, row=4)
+        C = Button(root,text="C",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("C")).grid(column=2, row=4)
+        D = Button(root,text="D",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("D")).grid(column=3, row=4)
+        E = Button(root,text="E",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("E")).grid(column=4, row=4)
+        F = Button(root,text="F",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("F")).grid(column=0, row=5)
+        G = Button(root,text="G",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("G")).grid(column=1, row=5)
+        H = Button(root,text="H",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("H")).grid(column=2, row=5)
+        I = Button(root,text="I",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("I")).grid(column=3, row=5)
+        J = Button(root,text="J",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("J")).grid(column=4, row=5)
+        K = Button(root,text="K",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("K")).grid(column=0, row=6)
+        L = Button(root,text="L",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("L")).grid(column=1, row=6)
+        M = Button(root,text="M",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("M")).grid(column=2, row=6)
+        N = Button(root,text="N",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("N")).grid(column=3, row=6)
+        O = Button(root,text="O",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("O")).grid(column=4, row=6)
+        P = Button(root,text="P",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("P")).grid(column=0, row=7)
+        Q = Button(root,text="Q",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("Q")).grid(column=1, row=7)
+        R = Button(root,text="R",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("R")).grid(column=2, row=7)
+        S = Button(root,text="S",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("S")).grid(column=3, row=7)
+        T = Button(root,text="T",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("T")).grid(column=4, row=7)
+        U = Button(root,text="U",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("U")).grid(column=0, row=8)
+        V = Button(root,text="V",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("V")).grid(column=1, row=8)
+        W = Button(root,text="W",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("W")).grid(column=2, row=8)
+        X = Button(root,text="X",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("X")).grid(column=3, row=8)
+        Y = Button(root,text="Y",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("Y")).grid(column=4, row=8)
+        Z = Button(root,text="Z",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("Z")).grid(column=0, row=9)
+        n1 = Button(root,text="1",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("1")).grid(column=1, row=9)
+        n2 = Button(root,text="2",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("2")).grid(column=2, row=9)
+        n3 = Button(root,text="3",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("3")).grid(column=3, row=9)
+        n4 = Button(root,text="4",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("4")).grid(column=4, row=9)
+        n5 = Button(root,text="5",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("5")).grid(column=0, row=10)
+        n6 = Button(root,text="6",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("6")).grid(column=1, row=10)
+        n7 = Button(root,text="7",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("7")).grid(column=2, row=10)
+        n8 = Button(root,text="8",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("8")).grid(column=3, row=10)
+        n9 = Button(root,text="9",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("9")).grid(column=4, row=10)
+        n0 = Button(root,text="0",bg="skyBlue",fg="Black",width=3,height=1,command=lambda: self.clicked("0")).grid(column=2, row=11)
+root = Tk()
+root.geometry("645x550")
+root.title("Hangman Game - Guess the Netflix Series")
+app = Hi(root)
+root.mainloop()
