@@ -114,13 +114,41 @@ class Hangman(Frame):
                 exit()
 
     def next_question(self):
-        #Invoking methods to randomly select one question out of the question-bank consisting of 20 questions
+        # Invoking methods to randomly select one question...
         self.random_number_generator()
         self.question_selector()
 
-        #Placing elements (Netflix image, title text, and question text) on the GUI window
-        photo = PhotoImage(file="Netflix.png")
-        self.banner = Button(window,text="hi",image=photo.subsample(3,5)).grid(column=0,row=0,columnspan=12)
+        # Create a variable to hold the PhotoImage object
+        photo = None
+
+        # Load the image using Pillow and handle potential errors
+        try:
+            # Use Image.open() to read the image file
+            original_image = Image.open("Netflix.png")
+
+            # Resize the image if needed (uncomment this line to use)
+            # original_image = original_image.resize((width, height), Image.LANCZOS)
+
+            # Convert the image to a format Tkinter can use
+            photo = ImageTk.PhotoImage(original_image)
+
+        except FileNotFoundError:
+            print("Error: The image file 'Netflix.png' was not found.")
+            # If the file is not found, you can display a placeholder text
+            self.banner = Button(window, text="Image Not Found", bg="gray")
+        except Exception as e:
+            print(f"Error loading image: {e}")
+            self.banner = Button(window, text="Error", bg="red")
+
+        # If the photo object was successfully created, proceed with the button
+        if photo:
+            # Create the button and assign the widget object to self.banner
+            self.banner = Button(window, text="hi", image=photo)
+
+            # This is a crucial step! Keep a reference to the image to prevent it from being garbage collected
+            self.banner.image = photo
+            # 2. Place the widget on the grid in a separate step
+        self.banner.grid(column=0, row=0, columnspan=12)
         self.title = Label(window,text="HANGMAN GAME - GUESS THE NETFLIX SERIES",bg="Black",font=("Georgia",20),fg="red").grid(row=1,column=0,columnspan=12)
         self.question = Label(window,text=self.question,bg="Black",fg="White",wraplength=600)
         self.question.grid(row=2,column=0,columnspan=12)
